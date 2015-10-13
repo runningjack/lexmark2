@@ -6,7 +6,12 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.1.*"
+        "laravel/framework": "5.1.*",
+        "toddish/verify": "~5",
+        "maatwebsite/excel": "~2.0",
+        "barryvdh/laravel-dompdf": "0.6.*",
+        "phpexcel/phpexcel": "dev-master",
+        "laravelcollective/html": "5.1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
