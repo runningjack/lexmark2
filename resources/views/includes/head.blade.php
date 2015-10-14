@@ -34,5 +34,10 @@
         .clsDatePicker {
             z-index: 100000;
         }
+
+        body.modal-open .datepicker {
+            z-index: 100000 !important;
+        }
+        .ui-datepicker{ z-index:100000 !important; }
     </style>
 <![endif]-->

@@ -73,7 +73,7 @@
 
             {
                 dateFormat: 'yy-mm-dd',
-                minDate: '+5d',
+
                 changeMonth: true
 
 
@@ -162,6 +162,9 @@
                     success:function(data){if(data){$("tbody#tblCompany").html(data)}else{alert(data);}}});$("#myModalComapanyEdit").modal("hide")
             }
         });
+        $("#reservation").on("focusin",function(){
+            $(".ui-datepicker").css("z-index","100000 !important");
+        })
 
 
     });

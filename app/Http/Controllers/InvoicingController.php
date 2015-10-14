@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Branch;
+use App\Invoicing;
+use App\Invoicingstack;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Job;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use Mockery\CountValidator\Exception;
 
@@ -118,11 +121,33 @@ class InvoicingController extends Controller
 
     public function upload(Request $request){
         $file ="";
-       // print_r($request->all());
 
+        $validator = Validator::make($request->all(), [
+            'site' => 'required',
+            'filexlx' => 'required'
+        ]);
+//|unique:posts|max:255
+        if ($validator->fails()) {
+            return \Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
+        }else{
+
+
+
+       // print_r($request->all());
+        if (!$request->hasFile('filexlx')) {
+         exit;
+        }
+        $file = $request->file('filexlx');
+        $fileName = $file->getClientOriginalName();
         $destinationPath =public_path()."/documents/";
 
-        $destinationPath = $destinationPath.'dataexcel.xlsx';
+        $destinationPath = $destinationPath.$fileName;
+        if(file_exists($destinationPath)){
+            unlink($destinationPath);
+        }
+        $request->file('filexlx')->move(public_path()."/documents/",$fileName);
 
         //$objPHPExcel = \PHPExcel_IOFactory::load($destinationPath.'PR-FullDataExport_2015_09_02_07_57_57_444IKJ.xlsx');
 
@@ -139,53 +164,54 @@ class InvoicingController extends Controller
         })->export('xls');*/
         try{
 
-            //$objPHPExcel = \PHPExcel_IOFactory::load($destinationPath);
-           // $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-
-
-            $sheet = Excel::filter('chunk')->load($destinationPath)->chunk(250, function($results){})->get();
+            $objPHPExcel = \PHPExcel_IOFactory::load($destinationPath);
+            $sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
+            //$sheet = Excel::filter('chunk')->load($destinationPath)->chunk(250, function($results){})->get();
             //$sheet = Excel::load($destinationPath, function($reader) {})->get();
-            print_r($sheet);
+            //print_r($sheetData);
+            $z=1;
+            $stack = new Invoicingstack();
+            $stack->title = $request->input('site');
+            $stack->description = $request->input('description');
+            $stack->file_url = $destinationPath;
+            $stack->invoicing_date = $request->input('submit_date');
+            $stack->created_at = date("Y-m-d H:i:s");
+            $stack->updated_at = date("Y-m-d H:i:s");
+            $stack->save();
+
+
+            foreach($sheetData as $data){
+
+                if($z !=1){
+                    $invoicing = new Invoicing();
+                    $invoicing->stack_id = $stack->id;
+                    $invoicing->site = $request->input('site');
+                    $invoicing->user = $data["B"];
+                    $invoicing->ip =$data["C"];
+                    $invoicing->job_title = $data["D"];
+                    $invoicing->submit_date = date_format(date_create($data["E"]),"Y-m-d H:i:s");
+                    $invoicing->final_date = date_format(date_create($data["F"]),"Y-m-d H:i:s");
+                    $invoicing->final_action = $data["G"];
+                    $invoicing->final_site = $data["H"];
+                    $invoicing->number_of_pages = $data["I"];
+                    $invoicing->release_ip = $data["J"];
+                    $invoicing->release_user = $data["K"];
+                    $invoicing->release_method = $data["L"];
+                    $invoicing->job_color = $data["M"];
+                    $invoicing->job_paper_size = $data["N"];
+                    $invoicing->job_paper_size = $data["O"];
+                    $invoicing->device_name = $data["P"];
+                    $invoicing->device_type = $data["Q"];
+                    $invoicing->device_host = $data["R"];
+                    $invoicing->created_at = date("Y-m-d H:i:s");
+                    $invoicing->save();
+                }
+                $z++;
+            }
         }catch (Exception $ex){
             echo $ex->getMessage();
         }
+        }
 
-
-
-        /*Excel::load($destinationPath, function ($reader) {
-
-            // var_dump($reader->get());
-
-             /*foreach ($reader->toArray() as $row) {
-                   //User::firstOrCreate($row);
-
-               }
-        });*/
-
-        //var_dump($result);
-        //$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
-
-        /*Excel::load($destinationPath.'PR-FullDataExport_2015_09_02_07_57_57_444IKJ.xlsx',function($render){
-           $result = ($render);
-        });*/
-
-       // print_r($sheetData);
-        $z=1;
-       /* foreach($sheetData as $data){
-            if($z !=1){
-                $stockprice = new \Corporateaction();
-                $stockprice->company                 =   preg_replace(array("/^\'/","/\'$/","/\?+/"),"",\DB::connection()->getPdo()->quote($sheetData[$z]["A"]));
-                $stockprice->dividend                 =   preg_replace(array("/^\'/","/\'$/"),"",\DB::connection()->getPdo()->quote($sheetData[$z]["B"]));
-                $stockprice->bonus                   =   preg_replace(array("/^\'/","/\'$/"),"",\DB::connection()->getPdo()->quote($sheetData[$z]["C"]));
-                $stockprice->closure                   =   preg_replace(array("/^\'/","/\'$/"),"",\DB::connection()->getPdo()->quote($sheetData[$z]["D"]));
-                $stockprice->AGM_date                    =   preg_replace(array("/^\'/","/\'$/"),"",\DB::connection()->getPdo()->quote($sheetData[$z]["E"]));
-                $stockprice->payment_date                  =  preg_replace(array("/^\'/","/\'$/"),"",\DB::connection()->getPdo()->quote($sheetData[$z]["F"]));
-                $stockprice->action_date                 =   $pricelistdate;
-                $stockprice->stacklist_id               =$liststack->id;
-
-                $stockprice->save();
-            }
-            $z++;
-        }*/
     }
 }
