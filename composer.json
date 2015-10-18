@@ -11,7 +11,9 @@
         "maatwebsite/excel": "~2.0",
         "barryvdh/laravel-dompdf": "0.6.*",
         "phpexcel/phpexcel": "dev-master",
-        "laravelcollective/html": "5.1.*"
+        "laravelcollective/html": "5.1.*",
+        "laravel/cashier": "~5.0"
+
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

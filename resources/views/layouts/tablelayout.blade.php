@@ -70,13 +70,24 @@
     $(function () {
         $.fn.modal.Constructor.prototype.enforceFocus = function() {};
         $('#reservation').datepicker(
-
             {
                 dateFormat: 'yy-mm-dd',
-
                 changeMonth: true
+            }
+        ).datepicker("setDate", new Date());
+
+        $('#date_from').datepicker(
+            {
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true
+            }
+        ).datepicker("setDate", new Date());
 
 
+        $('#date_to').datepicker(
+            {
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true
             }
         ).datepicker("setDate", new Date());
 

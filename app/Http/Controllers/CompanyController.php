@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Branch;
 use App\Company;
 
+use App\Invoicingstack;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -80,6 +82,10 @@ class CompanyController extends Controller
     public function show($id)
     {
         //
+        $company = Company::find($id);
+        $branches = Branch::where("company_id","=",$company->id)->get();
+        $stacks     =   Invoicingstack::where("company_id","=",$company->id)->get();
+        return View("company.companydetail",['stacks'=>$stacks,'company'=>$company,'branches'=>$branches,'title'=>'Company Detail']);
     }
 
     /**

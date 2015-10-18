@@ -44,7 +44,7 @@
                         echo"
                         <tr>
                             <td>$company->id</td>
-                            <td>$company->name</td>
+                            <td><a href='".url()."/company/companydetail/$company->id'>$company->name</a></td>
                             <td>$company->email</td>
                             <td>$company->phone</td>
                             <td>$company->address</td>

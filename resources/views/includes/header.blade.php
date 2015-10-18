@@ -30,15 +30,15 @@
                 <!-- User Account: style can be found in dropdown.less -->
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="{{url()}}/dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                        <span class="hidden-xs">Alexander Pierce</span>
+                        <img src="" class="user-image" alt="User Image">
+                        <span class="hidden-xs">Deola Ronke</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="{{url()}}/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                            <img src="" class="img-circle" alt="User Image">
                             <p>
-                                Alexander Pierce - Web Developer
+                                Deola Ronke - Administrator
                                 <small>Member since Nov. 2012</small>
                             </p>
                         </li>
@@ -114,8 +114,8 @@
                     <i class="fa fa-cog"></i> <span>Administrator</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="{{url()}}/settings/paper"><i class="fa fa-group"></i>Users</a></li>
-                    <li><a href="{{url()}}/setting/jobprice"><i class="fa fa-money"></i>Job Prices</a></li>
+                    <li><a href="{{url()}}/administrators/index"><i class="fa fa-group"></i>Users</a></li>
+                    <li><a href="{{url()}}/privileges/index"><i class="fa fa-lock"></i>Roles and Privileges</a></li>
                 </ul>
             </li>
 

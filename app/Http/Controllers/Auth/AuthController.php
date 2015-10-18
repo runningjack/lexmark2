@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Support\Facades\Redirect;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Toddish\Verify\Helpers\Verify;
 
 class AuthController extends Controller
 {
@@ -62,5 +64,58 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    public function getLogin(){
+        try
+        {
+
+            $input = Input::all();
+
+            $credentials = array(
+                'email' => $input['email'],
+                'password' => $input['password']
+            );
+            $email = $input['email'];
+            $password = $input['password'];
+            /* Auth::attempt(array(
+                 'identifier' => 'admin',
+                 'password' => 'admin'
+             ));*/
+            switch (Auth::verify(array('email' => $email,'verified'=>1, 'password' => $password),true))
+            {
+                case Verify::SUCCESS:
+                    return Redirect::intended('/dashboard');
+                    break;
+                case Verify::INVALID_CREDENTIALS:
+                    \Session::put("error_message","Invalid Credentials");
+                    return Redirect::back();
+                    break;
+                case Verify::UNVERIFIED:
+                    \Session::put("error_message","Unverified User");
+                    return Redirect::back();
+                    break;
+                case Verify::DISABLED:
+                    \Session::put("error_message","User Disabled");
+                    return Redirect::back();
+                    break;
+            }
+            /*if (Auth::attempt(array('email' => $email,'verified'=>1, 'password' => $password),true))
+            {
+                $user = User::find(Auth::user()->id);
+                if ($user->verified) {
+                    //return Redirect::to($redirect);
+                    return Redirect::intended('backend/dashboard/index');
+                } else {
+                    // Redirect to homepage
+                    // return Redirect::to('your_default_logged_in_page')->with('success', 'You have logged in successfully');
+                }
+            }*/
+        }
+        catch (Exception $e)
+        {
+            \Session::put("error_message",$e->getMessage());
+            return \Redirect::back();
+        }
     }
 }
