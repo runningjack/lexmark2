@@ -7,16 +7,11 @@
  */ ?>
 @extends("layouts.tablelayout")
 @section("content")
-
-
-
 <div class="row">
     <div class="col-lg-2 pull-right">
-        <a href="{{url()}}/administrators/addnew" class="btn btn-block btn-primary">Add New Company</a>
+        <a href="{{url()}}/administrators/addnew" class="btn btn-block btn-primary">Add New User</a>
     </div>
 </div>
-
-
 
 <div class="box">
     <div class="box-header">
@@ -56,56 +51,14 @@
                 <td>{{$user->email}}</td>
                 <td>{{$user->username}}</td>
                 <td>{{$user->phone}}</td>
-
                 <td>{{$user->created_at}}</td>
-
-                <td></td>
-                <td><a href="#" data-toggle="modal" data-target="#myModal{{$user->id}}"><i class="fa fa-trash">Delete</a></i> <!-- Modal -->
-                    <div class='modal fade' id='myModal{{$user->id}}' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
-                        <div class='modal-dialog'>
-                            <div class='modal-content'>
-                                <div class='modal-header  ' style="background-color: #3276B1; color:#fff">
-                                    <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>
-                                        &times;
-                                    </button>
-                                    <h1 class='modal-title' id='myModalLabel'>Remove User</h1>
-                                </div>
-                                <div class='modal-body' id="mbody{{$user->id}}">
-
-                                    <div class='row' >
-                                        <div class='col-md-12'>
-
-                                            <input type="hidden" id="pgid{{$user->id}}" name="pgid" value="{{$user->id}}">
-
-                                            <h2>Are you sure you want to remove <b>{{$user->firstname}}</b> from the database ?</h2>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <div class='modal-footer'>
-                                    <button type='button' class='btn btn-default' data-dismiss='modal'>
-                                        Cancel
-                                    </button>
-                                    <button type='button' class='btn btn-primary datadel' dal="{{$user->id}}">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
-                </td>
+                <td><a href="{{url()}}/administrators/edituser/{{$user->id}}" class='btn btn-primary'><span  class='glyphicon glyphicon-pencil'></span></a></td>
+                <td><a class='delLink btn-danger' dname='{{$user->firstname}}' url='/administrators/deleteuser/{{$user->id}}'  data-target='#myDelete' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></a></td>
             </tr>
             {{--*/ $x++ /*--}}
             @endforeach
             </tbody>
-
         </table>
     </div><!-- /.box-body -->
 </div><!-- /.box -->
-
 @stop
-
-
-
-

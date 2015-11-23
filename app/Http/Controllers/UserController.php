@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Toddish\Verify\Models\Role;
 use Toddish\Verify\Models\User;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -50,18 +52,21 @@ class UserController extends Controller
         // }else{
 
 
-        $validEmail = \User::where("email","=",$input['email'])->first();
-        if($validEmail){
-            \Session::put("error_message","Email already taken");
-            return \Redirect::back();
-            //exit;
+        $validator = Validator::make($request->all(), [
+            'firstname' =>'required|min:3|unique:users',
+            'lastname' =>'required|min:3|unique:users',
+            'password' =>'required',
+            'email' => 'required|unique:users',
+            'username' => 'required|unique:users'
+        ]);
+        if ($validator->fails()) {
+            return \Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
         }
-        $validEmail = \User::where("phone","=",$input['phone'])->first();
-        if($validEmail){
-            \Session::put("error_message","Email already taken");
-            return \Redirect::back();
-            //exit;
-        }
+
+
+
         $user = new \Toddish\Verify\Models\User;
         $role = new \Toddish\Verify\Models\Role;
 
@@ -71,12 +76,11 @@ class UserController extends Controller
         $user->phone    =   $input['phone'];
         $user->username = $input['username'];
         $user->email    =   $input['email'];
-        $user->middlename    =   $input['middlename'];
         $user->verified       = 0;
         $user->disabled       =   0;
         $user->password     =  ($input["password"]);
-        $user->created_by_id = \Auth::user()->id;
-        $user->created_by    = \Auth::user()->firstname ." ".\Auth::user()->lastname;
+       // $user->created_by_id = \Auth::user()->id;
+        //$user->created_by    = \Auth::user()->firstname ." ".\Auth::user()->lastname;
 
 
 
@@ -128,6 +132,8 @@ class UserController extends Controller
     public function edit($id)
     {
         //
+
+        return View("administrators.edituser",["myuser"=>User::find($id),"myrole"=>\DB::table("role_user")->where("user_id",$id)->get(),"roles"=>\DB::table("roles")->get(),"title"=>"Edit User"]);
     }
 
     /**
@@ -137,9 +143,58 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id="")
     {
         //
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'firstname' =>'required',
+            'lastname' =>'required',
+            'email' => 'required',
+            'username' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return \Redirect::back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $user = !empty($id) ? \Toddish\Verify\Models\User::find($input['id']) : $id;
+        $role =\Toddish\Verify\Models\Role::find($input['role_id']);
+
+        $user->firstname = $input['firstname'];
+        $user->lastname  = $input['lastname'];
+        $user->phone    =   $input['phone'];
+        $user->username = $input['username'];
+        $user->email    =   $input['email'];
+        $user->verified       = $input['verified'];
+        $user->disabled       =   $input['disabled'];
+
+        // $user->created_by_id = \Auth::user()->id;
+        //$user->created_by    = \Auth::user()->firstname ." ".\Auth::user()->lastname;
+        try{
+            if($user->update()){
+
+                $user->roles()->sync([$role->id]);
+
+                /* \DB::table('dblogs')->insert(
+                     ['user_id' => \Auth::user()->id, 'post_id' => $user->id,"description"=>"A new user has been committed to data store","action"=>"New user created awaits approval action",
+                         "post_type"=>"user","operator"=>\Auth::user()->firstname ." ". \Auth::user()->lastname,"created_at"=>date('Y-m-d H:i:s')]
+                 );*/
+                \Session::flash("success_message","New User Record Updated Successfully");
+                return \Redirect::back();
+            }
+        }catch(\Illuminate\Database\QueryException $e){
+            \Session::flash("error_message",$e->getMessage());
+            return \Redirect::back();
+        }catch(\PDOException $e){
+            \Session::flash("error_message",$e->getMessage());
+            return \Redirect::back();
+        }catch(\Exception $e){
+            \Session::flash("error_message",$e->getMessage());
+            return \Redirect::back();
+        }
+        //}
     }
 
     /**
@@ -151,5 +206,18 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+        $user =\App\User::find($id);
+        //$invoice =  \DB::table("invoicing")->where("job_paper_size","=",$paper->name)->get();
+        if($user->verified){
+            return response()->json("This Record cannot be deleted!<br>User is already varified");
+            exit;
+        }else{
+
+            $user->delete();
+            Session::flash("success_message","Record Successfully deleted");
+            echo "Record Successfully Deleted";
+            exit;
+        }
+
     }
 }

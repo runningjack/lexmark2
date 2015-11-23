@@ -1,5 +1,5 @@
     <!-- MAIN CONTENT -->
-    @extends("layouts.tablelayout")
+    @extends("layouts.default")
     @section("content")
     <div id="box">
 
@@ -11,7 +11,8 @@
         </div>
     </section>
 
-<form action="{{('UserController@postAddUser')}}" method="post" class="form-horizontal">
+<form action="{{ action('UserController@store') }}" method="post" class="form-horizontal">
+
     <div class="row">
     <div class="col-sm-9">
 
@@ -30,42 +31,30 @@
                             <i class="fa-fw fa fa-check"></i>{{Session::get('message')}}
                         </div>
                         @endif
+                        @if(Session::has('success_message'))
+                        <div class="alert alert-success fade in">
+                            <button class="close" data-dismiss="alert">×</button>
+                            <i class="fa-fw fa fa-check"></i>{{Session::get('success_message')}}
+                        </div>
+                        @endif
                         @if(Session::has('error_message'))
                         <div class="alert alert-danger fade in">
                             <button class="close" data-dismiss="alert">×</button>
                             <i class="fa-fw fa fa-check"></i>{{Session::get('error_message')}}
                         </div>
                         @endif
-                        @if($errors->has("firstname"))
-                        <div class="alert alert-danger fade in">
-                            <button class="close" data-dismiss="alert">×</button>
-                            <i class="fa-fw fa fa-times"></i>{{$errors->first("firstname",":message")}}
 
-                        </div>
 
-                        @endif
-                        @if($errors->has("lastname"))
-                        <div class="alert alert-danger fade in">
-                            <button class="close" data-dismiss="alert">×</button>
-                            <i class="fa-fw fa fa-times"></i>{{$errors->first("lastname",":message")}}
+                        <div class="col-xs-12"> @if ( ! empty( $errors ) )
+                            @foreach ( $errors->all() as $error )
+                            <div class="alert alert-danger fade in">
+                                <button class="close" data-dismiss="alert">×</button>
+                                <i class="fa-fw fa fa-times"></i>{{$error}}
 
-                        </div>
+                            </div>
 
-                        @endif
-                        @if($errors->has("email"))
-                        <div class="alert alert-danger fade in">
-                            <button class="close" data-dismiss="alert">×</button>
-                            <i class="fa-fw fa fa-times"></i>{{$errors->first("email",":message")}}
-                        </div>
-
-                        @endif
-                        @if($errors->has("phone"))
-                        <div class="alert alert-danger fade in">
-                            <button class="close" data-dismiss="alert">×</button>
-                            <i class="fa-fw fa fa-times"></i>{{$errors->first("phone",":message")}}
-                        </div>
-
-                        @endif
+                            @endforeach
+                            @endif</div>
 
 
                         <div class="form-group">
@@ -116,6 +105,7 @@
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">Last name</label>
                                     <div class="col-md-9">
+                                        <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}" />
                                         <input class="form-control" placeholder="Last name" id="lastname" name="lastname" type="text" required="required" >
                                     </div>
 
@@ -214,8 +204,5 @@
     </div>
     <!-- END MAIN PANEL -->
     <!-- ==========================CONTENT ENDS HERE ========================== -->
-<?php
-Session::flush();
-?>
     <!-- PAGE FOOTER -->
 @stop

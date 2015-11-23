@@ -6,6 +6,9 @@ use App\Paper;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
+
 
 class PaperController extends Controller
 {
@@ -17,6 +20,7 @@ class PaperController extends Controller
     public function index()
     {
         //
+
         $paper = Paper::all();
         return View("settings.paper",['papers'=>$paper,'title'=>'Job Papers Setting']);
     }
@@ -40,6 +44,21 @@ class PaperController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'name' =>'required|unique:papers',
+            'size' => 'required|unique:papers'
+        ]);
+
+        if ($validator->fails()) {
+            if($request->ajax()){
+                return response()->json($validator->messages());
+                exit;
+            }else{
+                return \Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
         array_forget($request,"_token");
 
         $all_request = $request->all();
@@ -103,6 +122,50 @@ class PaperController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'name' =>'required',
+            'size' => 'required'
+        ]);
+        if ($validator->fails()) {
+            if($request->ajax()){
+                return response()->json($validator->messages());
+            }else{
+                return \Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
+
+        array_forget($request,"_token");
+        $all_request = $request->all();
+        $paper = Paper::find($id);
+        foreach($all_request as $key=>$value){
+            /*
+             * remove all underscore contained
+             * in the edit form field
+             */
+            $key = preg_replace("/^_/","",$key);
+            $paper->$key = $value;
+        }
+
+
+        if($request->ajax()){
+            if($paper->update()){
+                return response()->json("Paper Successfully Updated");
+            }else{
+                return response()->json("Unexpected Error! Paper could not be updated");
+            }
+
+            exit;
+            // return \Redirect::back();
+        }else{
+            if($paper->update()){
+                \Session::flash("success_message","Paper Successfully Updated");
+            }else{
+                \Session::flash("error_message","Unexpected Paper Company could not be updated");
+            }
+        }
+
     }
 
     /**
@@ -113,6 +176,16 @@ class PaperController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $paper    =   Paper::find($id);
+        $invoice =  \DB::table("invoicing")->where("job_paper_size","=",$paper->name)->get();
+        if(count($invoice)>0){
+            return response()->json("This Record cannot be deleted!<br>Bill Transactions is already existing against this site");
+            exit;
+        }
+        if($paper->delete()){
+            Session::flash("success_message","Record Successfully deleted");
+            echo "Paper Successfully Deleted";
+            exit;
+        }
     }
 }

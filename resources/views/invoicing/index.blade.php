@@ -22,6 +22,41 @@
     <div class="box-header">
         <h3 class="box-title"></h3>
     </div><!-- /.box-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <?php  ?>
+            @if(\Illuminate\Support\Facades\Session::has('message'))
+            <div class="alert alert-success fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                <i class="fa-fw fa fa-check"></i>{{\Illuminate\Support\Facades\Session::get('message')}}
+            </div>
+            @endif
+            @if(\Illuminate\Support\Facades\Session::has('success_message'))
+            <div class="alert alert-success fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                <i class="fa-fw fa fa-check"></i>{{\Illuminate\Support\Facades\Session::get('success_message')}}
+            </div>
+            @endif
+            @if(Session::has('error_message'))
+            <div class="alert alert-danger fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                <i class="fa-fw fa fa-check"></i>{{Session::get('error_message')}}
+            </div>
+            @endif
+
+
+            <div class="col-xs-12"> @if ( ! empty( $errors ) )
+                @foreach ( $errors->all() as $error )
+                <div class="alert alert-danger fade in">
+                    <button class="close" data-dismiss="alert">×</button>
+                    <i class="fa-fw fa fa-times"></i>{{$error}}
+
+                </div>
+
+                @endforeach
+                @endif</div>
+        </div>
+    </div>
     <div class="box-body">
 
         @if (count($errors) > 0)

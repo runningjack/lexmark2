@@ -34,8 +34,8 @@
                 <th>Dimension</th>
                 <th>Unit</th>
 
-                <th ></th>
-                <th ></th>
+                <th colspan="2"></th>
+
             </tr>
             </thead>
             <tbody id="tblCompany">
@@ -50,8 +50,8 @@
                             <td>$paper->description</td>
                             <td>$paper->dimension</td>
                             <td>$paper->unit</td>
-                            <td><button class='edtPaperLink btn-primary' cid='{$paper->id}' cname='{$paper->name}' cdescription='$paper->description' cdimension='$paper->dimension' cunit='$paper->unit'><span  class='glyphicon glyphicon-pencil'></span></button></td>
-                            <td><button class='btn-danger'  data-target='#myModalPaperEdit' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
+                            <td><button class='edtPaperLink btn-primary' csize='$paper->size' cid='{$paper->id}' cname='{$paper->name}' cdescription='$paper->description' cdimension='$paper->dimension' cunit='$paper->unit'><span  class='glyphicon glyphicon-pencil'></span></button></td>
+                            <td><button class='delLink btn-danger' dname='$paper->name' url='/settings/paperdelete/$paper->id'  data-target='#myDelete' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
                         </tr>
                         ";
                 }
@@ -130,10 +130,10 @@
 </div>
 
 
-<div class="modal fade" id="myModalComapanyEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModalPaperEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="edtFrmCompany" method="post">
+            <form id="edtFrmPaper" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">Edit Company Detail</h4>
@@ -142,21 +142,27 @@
 
                     <input type="hidden"  name="_token" value="{{ csrf_token() }}" />
                     <div class="form-group has-feedback">
-                        <input type="text" class="form-control" name="_name" id="name" placeholder="Paper Name ">
+                        <input type="text" class="form-control" name="name" id="_name" placeholder="Paper Name ">
                         <span class="glyphicon glyphicon-file form-control-feedback"></span>
                     </div>
 
                     <div class="form-group has-feedback">
-                        <textarea class="form-control" placeholder="Description" name="_description" id="description"></textarea>
+                        <input type="text" class="form-control" name="size" id="_size" placeholder="Paper Size ">
+                        <span class="glyphicon glyphicon-file form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <textarea class="form-control" placeholder="Description" name="description" id="_description"></textarea>
                         <span class="glyphicon glyphicon-align-justify form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
-                        <input type="text" class="form-control" name="_dimension" id="dimension" placeholder="Dimension">
+                        <input type="text" class="form-control" name="dimension" id="_dimension" placeholder="Dimension">
+                        <input type="hidden" name="id" id="id" >
                         <span class="glyphicon glyphicon-phone-alt form-control-feedback"></span>
                     </div>
                     <div class="form-group has-feedback">
                         <label>Select Unit</label>
-                        <select class="form-control" name="_unit" id="unit">
+                        <select class="form-control" name="unit" id="_unit">
                             <option>--SELECT UNIT--</option>
                             <option value="Millimeter">mm × mm</option>
                             <option value="Inches">in × in</option>

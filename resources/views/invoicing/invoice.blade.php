@@ -4,70 +4,105 @@
  * User: Amedora
  * Date: 10/15/15
  * Time: 4:02 PM
- */ ?>
+ */
 
+define("MAJOR", 'Naira');
+define("MINOR", 'Kobo');
+class Towords
+{
+    //
 
+    var $pounds;
+    var $pence;
+    var $major;
+    var $minor;
+    var $words = '';
+    var $number;
+    var $magind;
+    var $units = array('','one','two','three','four','five','six','seven','eight','nine');
+    var $teens = array('ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen');
+    var $tens = array('','ten','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety');
+    var $mag = array('','thousand','million','billion','trillion');
+    function Towords($amount, $major=MAJOR, $minor=MINOR) {
+        $this->major = $major;
+        $this->minor = $minor;
+        $this->number = number_format($amount,2);
+        list($this->pounds,$this->pence) = explode('.',$this->number);
+        $this->words = " $this->major $this->pence$this->minor";
+        if ($this->pounds==0)
+            $this->words = "Zero $this->words";
+        else {
+            $groups = explode(',',$this->pounds);
+            $groups = array_reverse($groups);
+            for ($this->magind=0; $this->magind<count($groups); $this->magind++) {
+                if (($this->magind==1)&&(strpos($this->words,'hundred') === false)&&($groups[0]!='000'))
+                    $this->words = ' and ' . $this->words;
+                $this->words = $this->_build($groups[$this->magind]).$this->words;
+            }
+        }
+    }
+    function _build($n) {
+        $res = '';
+        $na = str_pad("$n",3,"0",STR_PAD_LEFT);
+        if ($na == '000') return '';
+        if ($na{0} != 0)
+            $res = ' '.$this->units[$na{0}] . ' hundred';
+        if (($na{1}=='0')&&($na{2}=='0'))
+            return $res . ' ' . $this->mag[$this->magind];
+        $res .= $res==''? '' : ' and';
+        $t = (int)$na{1}; $u = (int)$na{2};
+        switch ($t) {
+            case 0: $res .= ' ' . $this->units[$u]; break;
+            case 1: $res .= ' ' . $this->teens[$u]; break;
+            default:$res .= ' ' . $this->tens[$t] . ' ' . $this->units[$u] ; break;
+        }
+        $res .= ' ' . $this->mag[$this->magind];
+        return $res;
+    }
+}
+?>
 @extends("layouts.tablelayout")
 @section("content")
-<div class="row">
-    <div class="col-xs-6 col-md-6"></div>
-    <div class="col-xs-6 col-md-6"><form action="{{ action('InvoicingController@postGenerateInvoice') }}" id="regCompany" method="post">
-            <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" />
 
-            <input type="hidden" class="form-control" name="company_id" id="company_id" value="{{$company->id}}" >
-
-            <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="date_from" id="date_from" placeholder="Date From">
-                <span class="glyphicon glyphicon-user form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="date_to" id="date_to" placeholder="Date To">
-                <span class="glyphicon glyphicon-user form-control-feedback"></span>
-            </div>
-        </form>
-    </div>
-</div>
-<section class="invoice">
+<section class="invoice" style="font-size: 11px !important">
     <div class="row">
         <div class="col-xs-12">
             <h2 class="page-header">
-                <i class="fa fa-globe"></i> Robert Johnson Holdings
-                <small class="pull-right">Date: {{date("Y-m-d")}}</small>
+                <img src="{{url()}}/dist/img/logo.png" >
+                <small class="pull-right"><b>INVOICE</b></small>
             </h2>
         </div><!-- /.col -->
     </div>
     <div class="row invoice-info">
         <div class="col-sm-4 invoice-col">
-            From
             <address>
-                <strong>Robert Johnson Holdings</strong><br>
-                286 Ikorodu Rd,<br>
-                Anthony, Lagos<br>
-                Phone: (804) 123-5432<br>
-                Email: info@robertjohnsonholdings.com
+                <strong>ROBERT JOHNSON TECHNOLOGIES LIMITED</strong><br>
+                286 Ikorodu Rd, Anthony<br>
+                Lagos-Nigeria<br>
+                Phone: (+234) 12918761<br>
+                Email: lexmarksupport@robertjohnsonholdings.com
             </address>
         </div><!-- /.col -->
         <div class="col-sm-4 invoice-col">
-            Bill To
-            <address>
-                <strong>{{$company->name}}</strong><br>
-                {{$company->address}}<br>
-                @if(!empty($company->city)){{$company->city}}, @endif @if(!empty($company->state)){{$company->state}} @endif<br>
-                @if(!empty($company->phone)) Phone: {{$company->phone}} @endif<br>
-                @if(!empty($company->phone)) Email: {{$company->email}} @endif<br>
-                @if(!empty($company->phone)) Web: {{$company->web_url}} @endif
-            </address>
-        </div><!-- /.col -->
-        <div class="col-sm-4 invoice-col">
-            <b>Invoice No: {{$InvoiceNo}}</b><br>
-            <br>
 
-            <p><img src="{{url()}}/dist/img/196765LOGO.jpg" width="250" height="54" /></p>
         </div><!-- /.col -->
-    </div><!-- /.row -->
+        <div class="col-sm-4 invoice-col">
+            <b>Invoice No: {{$invoice->invoice_no}}</b><br>
+            <b>Invoice Date: {{$invoice->invoice_date}}</b><br>
+            Bill To
+            <address style="margin: 0px !important;">
+                <strong>{{$company->name}}</strong><br>
+                {{$company->address}}, @if(!empty($company->city)){{$company->city}}, @endif @if(!empty($company->state)){{$company->state}} @endif<br>
+                @if(!empty($company->phone)) Phone: {{$company->phone}} @endif<br>
+
+
+            </address>
+            <img src="{{url()}}/dist/img/196765LOGO.jpg" style="margin: 0 !important; padding: 0 !important; width: 153px; height: 33px !important"  />
+        </div>  <!-- /.col -->
+    </div>  <!-- /.row -->
     <div class="row">
-        <div class="col-xs-12 col-md-12" style="text-align: center"><p class="center" ><b><u>Lexmax Managed Print Services</u></b></p></div>
-        <div class="col-xs-12 col-md-12" style="text-align: center"><p class="center"><b><u>Duration: </u></b></p></div>
+        <div class="col-xs-12 col-md-12" style="text-align: center"><p class="center" ><b><u>Lexmark Managed Print Services</u></b></p></div>
+        <div class="col-xs-12 col-md-12" style="text-align: center"><p class="center"><b><u>Duration: {{$invoice->duration}}</u></b></p></div>
     </div>
     <!-- Table row -->
     <div class="row">
@@ -93,7 +128,8 @@
 
                         echo "<tr>
                         <td>$x</td>
-                        <td>"; foreach ($branches as $branch){if($invoiceData['site'] == $branch->id){echo $branch->city;}} echo"</td>
+                        <td>"; //echo \Illuminate\Support\Facades\DB::table("branches")->where("name",$invoiceData->site)->pluck("city");
+                        echo"</td>
                         <td>"; if (($invoiceData['a4']['a4color']['nopages']>0 )){ echo "Print / Copy Jobs Color A4 <br>";} if (($invoiceData['a4']['a4mono']['nopages']>0 )){ echo "Print / Copy Jobs Mono A4 <br>";}
                         if (($invoiceData['a3']['a3color']['nopages']>0 )){ echo "Print / Copy Jobs Color A3 <br>";} if (($invoiceData['a3']['a3mono']['nopages']>0 )){ echo "Print / Copy Jobs Mono A3 <br>";}
                         echo"</td>
@@ -130,7 +166,7 @@
     <div class="row">
         <!-- accepted payments column -->
         <div class="col-xs-6">
-
+        <p>Amount In Words: <?php $obj = new Towords($invoice->total); echo $obj->words; ?></p>
         </div><!-- /.col -->
         <div class="col-xs-6">
            <!-- <p class="lead">Amount Due 2/22/2014</p>-->
@@ -138,25 +174,47 @@
                 <table class="table">
                     <tr>
                         <th style="width:50%">Subtotal:</th>
-                        <td>₦{{number_format($total,2,'.',',')}}</td>
+                        <td>₦{{number_format($invoice->subtotal,2,'.',',')}}</td>
                     </tr>
                     <tr>
                         <th style="width:50%">5% VAT:</th>
-                        <td>₦{{number_format($total,2,'.',',')}}</td>
+                        <td>₦{{number_format($invoice->tax,2,'.',',')}}</td>
                     </tr>
                     <tr>
                         <th>Total:</th>
-                        <td>₦{{number_format($total,2,'.',',')}}</td>
+                        <td>₦{{number_format($invoice->total,2,'.',',')}}</td>
                     </tr>
                 </table>
             </div>
         </div><!-- /.col -->
     </div><!-- /.row -->
-
     <!-- this row will not appear when printing -->
+    <div class="row">
+        <div class="col-lg-4 col-xs-4">
+            ----------------------------------------------<br>
+            <b>Beka Phillips</b><br>
+            <i>Sales Manage</i><br>
+            <i>81024088452</i>
+        </div>
+        <div class="col-lg-4 col-xs-4"></div>
+        <div class="col-lg-4 col-xs-4">
+            ----------------------------------------------<br>
+            <b>E.O. Afuye</b><br>
+            <i>Head of Finance</i>
+
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-lg-4 col-xs-4">
+            <b>For {{$company->name}} Received By:</b> ----------------------------------------<br>
+        </div>
+    </div>
+
     <div class="row no-print">
         <div class="col-xs-12">
-            <a href="{{url()}}/invoice/print" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
+
+            <a href="{{url()}}/invoicing/print/{{$invoice->id}}" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Print</a>
             <!--<button class="btn btn-success pull-right"><i class="fa fa-credit-card"></i> Submit Payment</button>
             <button class="btn btn-primary pull-right" style="margin-right: 5px;"><i class="fa fa-download"></i> Generate PDF</button>-->
         </div>

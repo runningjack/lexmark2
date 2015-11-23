@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Validator;
 use App\Http\Controllers\Controller;
@@ -48,9 +50,7 @@ class AuthController extends Controller
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
-
     }
-
     /**
      * Create a new user instance after a valid registration.
      *
@@ -67,11 +67,18 @@ class AuthController extends Controller
     }
 
     public function getLogin(){
+        return View('auth.login');
+    }
+
+    public function getLogout(){
+        Auth::logout();
+        return View('auth.login');
+    }
+
+    public function postLogin(Request $request){
         try
         {
-
-            $input = Input::all();
-
+            $input =$request->all();
             $credentials = array(
                 'email' => $input['email'],
                 'password' => $input['password']
@@ -82,21 +89,22 @@ class AuthController extends Controller
                  'identifier' => 'admin',
                  'password' => 'admin'
              ));*/
+           // Auth::();
             switch (Auth::verify(array('email' => $email,'verified'=>1, 'password' => $password),true))
             {
                 case Verify::SUCCESS:
                     return Redirect::intended('/dashboard');
                     break;
                 case Verify::INVALID_CREDENTIALS:
-                    \Session::put("error_message","Invalid Credentials");
+                    \Session::flash("error_message","Invalid Credentials");
                     return Redirect::back();
                     break;
                 case Verify::UNVERIFIED:
-                    \Session::put("error_message","Unverified User");
+                    \Session::flash("error_message","Unverified User");
                     return Redirect::back();
                     break;
                 case Verify::DISABLED:
-                    \Session::put("error_message","User Disabled");
+                    \Session::flash("error_message","User Disabled");
                     return Redirect::back();
                     break;
             }
@@ -114,7 +122,7 @@ class AuthController extends Controller
         }
         catch (Exception $e)
         {
-            \Session::put("error_message",$e->getMessage());
+            \Session::flash("error_message",$e->getMessage());
             return \Redirect::back();
         }
     }

@@ -139,6 +139,9 @@ return [
         'Toddish\Verify\Providers\VerifyServiceProvider',
         Barryvdh\DomPDF\ServiceProvider::class,
         'Maatwebsite\Excel\ExcelServiceProvider',
+        //Towords\Towords\TowordsServiceProvider::class,
+        //'Towords\Towords\TowordsServiceProvider',//::class,
+        //'Barryvdh\DomPDF\ServiceProvider',
 
         /*
          * Application Service Providers...
@@ -197,6 +200,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        //'Towords' => Towords\Towords\Facade::class,
+        //'PDF' => 'Barryvdh\DomPDF\Facade',
         'driver' => 'verify',
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
 

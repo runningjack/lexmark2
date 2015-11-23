@@ -8,17 +8,11 @@
 
 @extends("layouts.tablelayout")
 @section("content")
-
-
-
 <div class="row">
     <div class="col-lg-2 pull-right">
-        <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#myModalComapanyNew">Add New Branch</button>
+        <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#myModalCompanyNew">Add New Branch</button>
     </div>
 </div>
-
-
-
 <div class="box">
     <div class="box-header">
         <h3 class="box-title"></h3>
@@ -54,8 +48,6 @@
                 echo"<tr><td colspan='5'>No Record Found</td> </tr>";
             }
             ?>
-
-
             </tbody>
             <tfoot>
             <tr>
@@ -70,10 +62,7 @@
         </table>
     </div><!-- /.box-body -->
 </div><!-- /.box -->
-
-
-
-<div class="modal fade" id="myModalComapanyNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModalCompanyNew" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="regBranch" method="post">

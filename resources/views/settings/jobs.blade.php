@@ -13,7 +13,7 @@
 
 <div class="row">
     <div class="col-lg-2 pull-right">
-        <button class="btn btn-block btn-primary" data-toggle="modal" data-target="#myModalJobNew">Add Job</button>
+        <!--<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#myModalJobNew">Add Job</button>-->
     </div>
 </div>
 
@@ -32,8 +32,8 @@
                 <th>Description</th>
                 <th>Date Created</th>
                 <th>Date Modified</th>
-                <th ></th>
-                <th ></th>
+                <!--<th ></th>
+                <th ></th>-->
             </tr>
             </thead>
             <tbody id="tblCompany">
@@ -48,13 +48,13 @@
                             <td>$job->description</td>
                             <td>$job->created_at</td>
                             <td>$job->updated_at</td>
-                            <td><button class='edtJobLink btn-primary' cid='{$job->id}' cname='{$job->name}' cdescription='$job->description'><span  class='glyphicon glyphicon-pencil'></span></button></td>
-                            <td><button class='btn-danger'  data-target='#myModalPaperEdit' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
+                           <!-- <td><button class='edtJobLink btn-primary' cid='{$job->id}' cname='{$job->name}' cdescription='$job->description'><span  class='glyphicon glyphicon-pencil'></span></button></td>
+                            <td><button class='btn-danger'  data-target='#myModalPaperEdit' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>-->
                         </tr>
                         ";
                 }
             }else{
-                echo"<tr><td colspan='7'>No Record Found</td> </tr>";
+                echo"<tr><td colspan='5'>No Record Found</td> </tr>";
             }
             ?>
 

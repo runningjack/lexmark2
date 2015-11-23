@@ -17,13 +17,47 @@
     </div>
 </div>
 
-
-
 <div class="box">
     <div class="box-header">
         <h3 class="box-title"></h3>
     </div><!-- /.box-header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <?php  ?>
+            @if(\Illuminate\Support\Facades\Session::has('message'))
+            <div class="alert alert-success fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                <i class="fa-fw fa fa-check"></i>{{\Illuminate\Support\Facades\Session::get('message')}}
+            </div>
+            @endif
+            @if(\Illuminate\Support\Facades\Session::has('success_message'))
+            <div class="alert alert-success fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                <i class="fa-fw fa fa-check"></i>{{\Illuminate\Support\Facades\Session::get('success_message')}}
+            </div>
+            @endif
+            @if(Session::has('error_message'))
+            <div class="alert alert-danger fade in">
+                <button class="close" data-dismiss="alert">×</button>
+                <i class="fa-fw fa fa-check"></i>{{Session::get('error_message')}}
+            </div>
+            @endif
+
+
+            <div class="col-xs-12"> @if ( ! empty( $errors ) )
+                @foreach ( $errors->all() as $error )
+                <div class="alert alert-danger fade in">
+                    <button class="close" data-dismiss="alert">×</button>
+                    <i class="fa-fw fa fa-times"></i>{{$error}}
+
+                </div>
+
+                @endforeach
+                @endif</div>
+        </div>
+    </div>
     <div class="box-body">
+
         <table id="example1" class="table table-bordered table-striped">
             <thead>
             <tr>
@@ -50,7 +84,7 @@
                             <td>$company->address</td>
                             <td>$company->web_url</td>
                             <td><button class='edtCompanyLink btn-primary' cid='{$company->id}' cname='{$company->name}' cemail='$company->email' cphone='$company->phone' caddress='$company->address' curl='$company->web_url' ><span  class='glyphicon glyphicon-pencil'></span></button></td>
-                            <td><button class='btn-danger'  data-target='#myModalComapanyEdit' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
+                            <td><button class='delLink btn-danger' dname='$company->name' url='/company/companydelete/$company->id'  data-target='#myDelete' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
                         </tr>
                         ";
                     }

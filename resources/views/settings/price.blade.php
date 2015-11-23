@@ -38,6 +38,9 @@
             </thead>
             <tbody id="tblCompany">
             <?php
+            $paperid="";
+            $jobtype ="";
+            $jobid ="";
             if($prices){
                 foreach($prices as $price){
                     echo"
@@ -46,6 +49,7 @@
                             <td>";
                             foreach($papers as $paper){
                                 if($paper->id == $price->paper_id){
+                                    $paperid = $paper->name;
                                     echo $paper->name.", ".$paper->size;
                                 }
                             }
@@ -55,14 +59,15 @@
                             <td>";
                     foreach($jobs as $job){
                         if($job->id == $price->job_id){
+                            $jobid = $job->name;
                             echo $job->name;
                                 }
                     }
                     echo"</td>
                             <td>$price->job_type</td>
                             <td>$price->price</td>
-                            <td></td>
-                            <td></td>
+                            <td><button class='edtPriceLink btn-primary' cpaperid='{$paperid}' cjobtype='{$price->job_type}' cid='{$price->id}' cjobid='{$price->job_id}' cprice='$price->price'><span  class='glyphicon glyphicon-pencil'></span></button></td>
+                            <td><button class='btn-danger'  data-target='#myModalPaperEdit' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
                         </tr>
                         ";
                 }
@@ -86,7 +91,7 @@
             <form id="regPrice" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Add New Price</h4>
+                    <h4 class="modal-title">Edit Price</h4>
                 </div>
                 <div class="modal-body">
 
@@ -132,7 +137,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" >Add New Paper</button>
+                    <button type="submit" class="btn btn-primary" >Add New Price</button>
                 </div>
             </form>
         </div>
@@ -140,43 +145,59 @@
 </div>
 
 
-<div class="modal fade" id="myModalComapanyEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModalPriceEdit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="edtFrmCompany" method="post">
+            <form id="regPriceEdit" action="{{ action('JobpriceController@update') }}" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Edit Company Detail</h4>
+                    <h4 class="modal-title">Edit Price</h4>
                 </div>
                 <div class="modal-body">
 
-                    <input type="hidden"  name="_token" value="{{ csrf_token() }}" />
+                    <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" required />
                     <div class="form-group has-feedback">
-                        <input type="text" class="form-control" name="_name" id="name" placeholder="Paper Name ">
-                        <span class="glyphicon glyphicon-file form-control-feedback"></span>
-                    </div>
-
-                    <div class="form-group has-feedback">
-                        <textarea class="form-control" placeholder="Description" name="_description" id="description"></textarea>
-                        <span class="glyphicon glyphicon-align-justify form-control-feedback"></span>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <input type="text" class="form-control" name="_dimension" id="dimension" placeholder="Dimension">
-                        <span class="glyphicon glyphicon-phone-alt form-control-feedback"></span>
-                    </div>
-                    <div class="form-group has-feedback">
-                        <label>Select Unit</label>
-                        <select class="form-control" name="_unit" id="unit">
-                            <option>--SELECT UNIT--</option>
-                            <option value="Millimeter">mm × mm</option>
-                            <option value="Inches">in × in</option>
+                        <select  class="form-control" name="paper_id" id="_paperid" >
+                            <?php
+                            if($papers){
+                                foreach($papers as $paper){
+                                    echo "<option value='$paper->id'>$paper->name </option>";
+                                }
+                            }
+                            ?>
                         </select>
+
                     </div>
 
+                    <div class="form-group has-feedback">
+                        <select  class="form-control" name="job_id" id="_jobid" required="required">
+                            <?php
+                            if($jobs){
+                                foreach($jobs as $job){
+                                    echo "<option value='$job->id'>$job->name </option>";
+                                }
+                            }
+                            ?>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <select  class="form-control" name="job_type" id="_jobtype" required="required">
+                            <option value="mono">Monochrome</option>
+                            <option value="color">Colored</option>
+                        </select>
+<input type="hidden" name="id" id="id" >
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" name="price" id="_price" placeholder="Price" required="required">
+
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" >Save Record</button>
+                    <button type="submit" class="btn btn-primary" >Modify Price</button>
                 </div>
             </form>
         </div>

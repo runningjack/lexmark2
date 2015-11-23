@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Bill;
 use App\Branch;
 use App\Company;
 
@@ -9,6 +10,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
@@ -44,9 +48,24 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         //
-        array_forget($request,"_token");
 
+        $validator = Validator::make($request->all(), [
+            'name' =>'required|min:5|unique:companies',
+            'email' =>'required|min:5|unique:companies',
+            'phone' => 'required|min:5|unique:companies'
+        ]);
+        if ($validator->fails()) {
+            if($request->ajax()){
+                return response()->json($validator->messages());
+            }else{
+                return \Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
         $all_request = $request->all();
+        array_forget($all_request,"_token");
+
         $company = new Company();
         foreach($all_request as $key=>$value){
             $company->$key = $value;
@@ -54,21 +73,8 @@ class CompanyController extends Controller
         $company->save();
         $companies = Company::all();
         if($request->ajax()){
-            if($companies){
-                foreach($companies as $company){
-                    echo"
-                        <tr>
-                            <td>$company->id</td>
-                            <td>$company->name</td>
-                            <td>$company->email</td>
-                            <td>$company->phone</td>
-                            <td>$company->address</td>
-                            <td>$company->web_url</td>
-                        </tr>
-                        ";
-                }
-            }
-            exit;
+            return response()->json("record saved successfully");
+
         }
             return View("company.index",['companies'=>$companies,'title'=>'Companies']);
     }
@@ -84,8 +90,11 @@ class CompanyController extends Controller
         //
         $company = Company::find($id);
         $branches = Branch::where("company_id","=",$company->id)->get();
-        $stacks     =   Invoicingstack::where("company_id","=",$company->id)->get();
-        return View("company.companydetail",['stacks'=>$stacks,'company'=>$company,'branches'=>$branches,'title'=>'Company Detail']);
+        $stacks     =   Invoicingstack::where("company_id","=",$company->id)->where("status","=",0)->get();
+        $stack2s     =   Invoicingstack::where("company_id","=",$company->id)->get();
+        $invoice    =   Bill::where("company_id","=",$company->id)->get();
+        $invoiceGroup = Bill::where("company_id","=",$company->id)->groupBy("invoice_date")->get();
+        return View("company.companydetail",['invGp'=>$invoiceGroup,'stacks'=>$stacks,'stack2s'=>$stack2s,'invoices'=>$invoice,'company'=>$company,'branches'=>$branches,'title'=>'Company Detail']);
     }
 
     /**
@@ -109,6 +118,19 @@ class CompanyController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $validator = Validator::make($request->all(), [
+            'name' =>'required',
+            'phone' => 'required'
+        ]);
+        if ($validator->fails()) {
+            if($request->ajax()){
+                return response()->json($validator->messages());
+            }else{
+                return \Redirect::back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
 
         array_forget($request,"_token");
         $all_request = $request->all();
@@ -121,26 +143,17 @@ class CompanyController extends Controller
             $key = preg_replace("/^_/","",$key);
             $company->$key = $value;
         }
-        $company->update();
+        if($company->update()){
+            \Session::flash("success_message","Company Successfully Updated");
+        }else{
+            \Session::flash("error_message","Unexpected Error Company could not be updated");
+        }
         $companies = Company::all();
         if($request->ajax()){
-            if($companies){
-                foreach($companies as $company){
-                    echo"
-                        <tr>
-                            <td>$company->id</td>
-                            <td>$company->name</td>
-                            <td>$company->email</td>
-                            <td>$company->phone</td>
-                            <td>$company->address</td>
-                            <td>$company->web_url</td>
-                            <td><button class='edtCompanyLink btn-primary' cid='{$company->id}' cname='{$company->name}' cemail='$company->email' cphone='$company->phone' caddress='$company->address' curl='$company->web_url' ><span  class='glyphicon glyphicon-pencil'></span></button></td>
-                            <td><button class='btn-danger'  data-target='#myModalComapanyEdit' data-toggle='modal'><span  class='glyphicon glyphicon-trash'></span></button></td>
-                        </tr>
-                        ";
-                }
-            }
+
+            response()->json("Company Successfully Updated");
             exit;
+           // return \Redirect::back();
         }
         return View("company.index",['companies'=>$companies,'title'=>'Companies']);
     }
@@ -151,8 +164,19 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
-        //
+        $company    =   Company::find($id);
+        $invoice =  DB::table("invoices")->where("company_id","=",$id)->get();
+
+        if(count($invoice)>0){
+            return response()->json("This Record cannot be deleted!<br>Bill Transactions is already existing against this company");
+            exit;
+        }
+        if($company->delete()){
+            Session::flash("success_message","Record Successfully deleted");
+            echo "Company Successfully Deleted";
+            exit;
+        }
     }
 }
