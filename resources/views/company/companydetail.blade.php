@@ -339,6 +339,10 @@
                     <input type="hidden" id="_token" name="_token" value="{{csrf_token()}}" />
                     <input type="hidden" id="company_id" name="company_id" value="{{$company->id}}" />
                     <div class="form-group has-feedback">
+                        <input type="number" class="form-control" name="inv_no" id="inv_no" placeholder="Invoice Number">
+
+                    </div>
+                    <div class="form-group has-feedback">
                         <input type="text" class="form-control" name="date_from" id="date_from" placeholder="Date From">
                         <span class="glyphicon glyphicon-calendar form-control-feedback"></span>
                     </div>

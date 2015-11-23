@@ -23,27 +23,27 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="InvoicingController.php" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="InvoicingController.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InvoicingController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="811" column="6" selection-start="52642" selection-end="52642" vertical-scroll-proportion="-13.923077" vertical-offset="13136" max-vertical-offset="14722">
+            <state line="281" column="67" selection-start="9677" selection-end="9677" vertical-scroll-proportion="0.5256167" vertical-offset="4211" max-vertical-offset="14807">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="companydetail.blade.php" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="companydetail.blade.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/company/companydetail.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="21" selection-start="1215" selection-end="1476" vertical-scroll-proportion="0.6354582" vertical-offset="429" max-vertical-offset="7191">
+            <state line="341" column="90" selection-start="15872" selection-end="15872" vertical-scroll-proportion="-4.5882354" vertical-offset="5478" max-vertical-offset="7259">
               <folding>
                 <element signature="tag#div#2" expanded="false" />
                 <element signature="tag#div#3" expanded="false" />
                 <element signature="tag#div#4" expanded="false" />
-                <marker date="1448291304071" expanded="true" signature="3209:3257" placeholder="..." />
-                <marker date="1448291304071" expanded="true" signature="8840:9000" placeholder="..." />
-                <marker date="1448291304071" expanded="true" signature="10061:10918" placeholder="..." />
-                <marker date="1448291304071" expanded="true" signature="12794:12883" placeholder="..." />
+                <marker date="1448294933255" expanded="true" signature="3209:3257" placeholder="..." />
+                <marker date="1448294933255" expanded="true" signature="8840:9000" placeholder="..." />
+                <marker date="1448294933255" expanded="true" signature="10061:10918" placeholder="..." />
+                <marker date="1448294933255" expanded="true" signature="12794:12883" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -52,7 +52,7 @@
       <file leaf-file-name="default.blade.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/resources/views/layouts/default.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="225" column="35" selection-start="9160" selection-end="9160" vertical-scroll-proportion="-6.7843137" vertical-offset="3394" max-vertical-offset="6528">
+            <state line="218" column="25" selection-start="8839" selection-end="8839" vertical-scroll-proportion="-24.450981" vertical-offset="2374" max-vertical-offset="6579">
               <folding />
             </state>
           </provider>
@@ -187,9 +187,9 @@
         <option value="$PROJECT_DIR$/config/app.php" />
         <option value="$PROJECT_DIR$/resources/views/invoicing/print.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/invoicing/invoicepdf.blade.php" />
-        <option value="$PROJECT_DIR$/app/Http/Controllers/InvoicingController.php" />
         <option value="$PROJECT_DIR$/resources/views/layouts/default.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/company/companydetail.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Controllers/InvoicingController.php" />
       </list>
     </option>
   </component>
@@ -726,32 +726,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InvoicingController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="811" column="6" selection-start="52642" selection-end="52642" vertical-scroll-proportion="-13.923077" vertical-offset="13136" max-vertical-offset="14722">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/layouts/default.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="225" column="35" selection-start="9160" selection-end="9160" vertical-scroll-proportion="-6.7843137" vertical-offset="3394" max-vertical-offset="6528">
+        <state line="218" column="25" selection-start="8839" selection-end="8839" vertical-scroll-proportion="-24.450981" vertical-offset="2374" max-vertical-offset="6579">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/views/company/companydetail.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="21" selection-start="1215" selection-end="1476" vertical-scroll-proportion="0.6354582" vertical-offset="429" max-vertical-offset="7191">
+        <state line="341" column="90" selection-start="15872" selection-end="15872" vertical-scroll-proportion="-4.5882354" vertical-offset="5478" max-vertical-offset="7259">
           <folding>
             <element signature="tag#div#2" expanded="false" />
             <element signature="tag#div#3" expanded="false" />
             <element signature="tag#div#4" expanded="false" />
-            <marker date="1448291304071" expanded="true" signature="3209:3257" placeholder="..." />
-            <marker date="1448291304071" expanded="true" signature="8840:9000" placeholder="..." />
-            <marker date="1448291304071" expanded="true" signature="10061:10918" placeholder="..." />
-            <marker date="1448291304071" expanded="true" signature="12794:12883" placeholder="..." />
+            <marker date="1448294933255" expanded="true" signature="3209:3257" placeholder="..." />
+            <marker date="1448294933255" expanded="true" signature="8840:9000" placeholder="..." />
+            <marker date="1448294933255" expanded="true" signature="10061:10918" placeholder="..." />
+            <marker date="1448294933255" expanded="true" signature="12794:12883" placeholder="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/InvoicingController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="281" column="67" selection-start="9677" selection-end="9677" vertical-scroll-proportion="0.5256167" vertical-offset="4211" max-vertical-offset="14807">
+          <folding />
         </state>
       </provider>
     </entry>

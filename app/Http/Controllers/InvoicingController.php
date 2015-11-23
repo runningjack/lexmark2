@@ -271,16 +271,21 @@ class InvoicingController extends Controller
         $invoiceno="";
         if(count($stacks)>0){
             $bill_no = $bill->genInvoiceNo($company->id)>0 ? $bill->genInvoiceNo($company->id) : "01";
-            $invoiceno = "RJLEX/".strtoupper(substr($company->name,0,3))."/". $bill_no;
+            $invoiceno = "RJLEX/".strtoupper(substr($company->name,0,3))."/". !empty($input['$input']) ? $bill_no : str_pad($input['$input'],3,"0",STR_PAD_LEFT);
             $bill->invoice_no       =   $invoiceno;
             $bill->created_at       =   date("Y-m-d H:i:s");
             $bill->updated_at       =   date("Y-m-d H:i:s");
 
             $bill->company_id       =   $company->id;
             $bill->invoice_date     =   date("Y-m-d H:i:s");
+            if(Bill::where("invoice_no","=",$invoiceno)){
+                echo "Invoice number already existing in database";
+                exit;
+            }
             $bill->save();
             //$invoiceno = "RJLEX/".strtoupper(substr($company->name,0,3))."/".$bill->genInvoiceNo();
         }
+
 
         $dateFrom   =   "2000-01-01";
         $dateTo     =   "2000-01-01";

@@ -225,8 +225,11 @@
             },submitHandler: function(form) {
                 $("#myModalGenerateInvoice").modal("hide")
                 $("#myProcess").modal("show")//$("tbody#tblCompany").html(data);
-                $.ajax({url: '<?php echo url() ?>/invoicing/invoice/',type: 'post',data: $(form).serialize(),dataType: 'json',
-                    success:function(data){if(data){$("div#transProcess").html("<div class='alert alert-info fade in'><button class='close' data-dismiss='alert'>×</button><i class='fa-fw fa fa-check'></i>"+data+"</div>")}else{alert(data);}setInterval(window.location.reload(),500000);}});
+                var formData = new FormData($(this)[0]);
+                $.ajax({url: '<?php echo url() ?>/invoicing/invoice/',type: 'post',data: formData,async: false,dataType: 'json',
+                    success:function(data){if(data){$("div#transProcess").html("<div class='alert alert-info fade in'><button class='close' data-dismiss='alert'>×</button><i class='fa-fw fa fa-check'></i>"+data+"</div>")}else{alert(data);},cache: false,
+         contentType: false,
+         processData: false;}});
             }
         });*/
 
