@@ -271,14 +271,15 @@ class InvoicingController extends Controller
         $invoiceno="";
         if(count($stacks)>0){
             $bill_no = $bill->genInvoiceNo($company->id)>0 ? $bill->genInvoiceNo($company->id) : "01";
-            $invoiceno = "RJLEX/".strtoupper(substr($company->name,0,3))."/". !empty($input['$input']) ? $bill_no : str_pad($input['$input'],3,"0",STR_PAD_LEFT);
+            $invoiceno =  !empty($input['inv_no']) ? "RJLEX/".strtoupper(substr($company->name,0,3))."/".$bill_no : "RJLEX/".strtoupper(substr($company->name,0,3))."/". str_pad($input['inv_no'],3,"0",STR_PAD_LEFT);
             $bill->invoice_no       =   $invoiceno;
             $bill->created_at       =   date("Y-m-d H:i:s");
             $bill->updated_at       =   date("Y-m-d H:i:s");
 
             $bill->company_id       =   $company->id;
             $bill->invoice_date     =   date("Y-m-d H:i:s");
-            if(Bill::where("invoice_no","=",$invoiceno)){
+            $check = Bill::where("invoice_no","=",$invoiceno)->pluck("invoice_no");
+            if(!empty($check)){
                 echo "Invoice number already existing in database";
                 exit;
             }
@@ -398,7 +399,7 @@ class InvoicingController extends Controller
                     $p++;
                     if(strtolower($minvoice->device_type) =="c"){
                         if(strtolower($minvoice->job_color) =="y"){
-                            if($minvoice->job_paper_size == "A3"){
+                            if($minvoice->job_paper_size == "A3" || (($minvoice->job_paper_size == "Tabloid") || ($minvoice->job_paper_size =="Ledger"))){
                                 if($minvoice->device_name == 'Lexmark X925' || ($minvoice->device_name == 'Lexmark X950' || $minvoice->device_name == 'Lexmark X950de') ){
                                     $cost                   =   Price::where("job_id",1)->where("job_type","color")->where("paper_id",$paperid)->pluck("price");
                                     $amount                 =   $cost * $minvoice->number_of_pages;
@@ -426,8 +427,6 @@ class InvoicingController extends Controller
                                     $objPHPExcel->getActiveSheet()->setCellValue('R'.$p,$minvoice->device_name);
                                     $objPHPExcel->getActiveSheet()->setCellValue('S'.$p,$minvoice->device_type);
                                     $objPHPExcel->getActiveSheet()->setCellValue('T'.$p,$minvoice->device_host);
-
-
 
                                 }elseif(strtolower($minvoice->device_name) == 'lexmark x860' ){ # else if Lexmark X860 (a mono A3 printer) //|| strtolower($minvoice->device_name) == 'lexmark x860de'
                                     $cost                   =   Price::where("job_id",1)->where("job_type","mono")->where("paper_id",$paperid)->pluck("price");
@@ -457,7 +456,7 @@ class InvoicingController extends Controller
                                     $objPHPExcel->getActiveSheet()->setCellValue('S'.$p,$minvoice->device_type);
                                     $objPHPExcel->getActiveSheet()->setCellValue('T'.$p,$minvoice->device_host);
 
-                                }else{ # otherwise its an A4 job for color not A3 as may be indicated in datafile
+                                }else{ # otherwise its an A4 job for color not A3 as may be indicated in datafile but A4
                                     $cost                       =   Price::where("job_id",1)->where("job_type","color")->where("paper_id",$paperid)->pluck("price");
                                     $amount                     =   $cost * $minvoice->number_of_pages;
                                     $sumNoPagesA4Color          +=  $minvoice->number_of_pages;
@@ -515,7 +514,7 @@ class InvoicingController extends Controller
                                 $objPHPExcel->getActiveSheet()->setCellValue('T'.$p,$minvoice->device_host);
                             }
                         }elseif(strtolower($minvoice->job_color) =="n"){
-                            if($minvoice->job_paper_size == "A3"  ){//&&
+                            if($minvoice->job_paper_size == "A3" || (($minvoice->job_paper_size == "Tabloid") || ($minvoice->job_paper_size =="Ledger")) ){//&&
                                 if(strtolower($minvoice->device_name) == 'lexmark mx860'){//de
                                     $cost                   =   Price::where("job_id",1)->where("job_type","mono")->where("paper_id",$paperid)->pluck("price");
                                     $amount                 =   $cost * $minvoice->number_of_pages;
@@ -631,7 +630,7 @@ class InvoicingController extends Controller
                         }
 
                     }elseif(strtolower($minvoice->device_type) =="m"){
-                        if($minvoice->job_paper_size == "A3"  ){#if device type is a mono and paper is A3
+                        if($minvoice->job_paper_size == "A3" || (($minvoice->job_paper_size == "Tabloid") || ($minvoice->job_paper_size =="Ledger"))  ){#if device type is a mono and paper is A3
                             if(strtolower($minvoice->device_name) == 'lexmark mx860'){ #de we need to be sure its an lexmark mx860de device
                                 $cost                   =   Price::where("job_id",1)->where("job_type","mono")->where("paper_id",$paperid)->pluck("price");
                                 $amount                 =   $cost * $minvoice->number_of_pages;
@@ -659,7 +658,9 @@ class InvoicingController extends Controller
                                 $objPHPExcel->getActiveSheet()->setCellValue('R'.$p,$minvoice->device_name);
                                 $objPHPExcel->getActiveSheet()->setCellValue('S'.$p,$minvoice->device_type);
                                 $objPHPExcel->getActiveSheet()->setCellValue('T'.$p,$minvoice->device_host);
-                            }else{ # otherwise its an A4 job for mono not A3 as may be indicated in script
+                            }elseif((strtolower($minvoice->device_name) == 'lexmark x654de' || strtolower($minvoice->device_name)== 'lexmark x654') || (strtolower($minvoice->device_name) == 'lexmark t656' || strtolower($minvoice->device_name)== 'lexmark t656de')){ # otherwise its an A4 job for mono not A3 as may be indicated in script
+
+                                $paperid = DB::table("papers")->where("name","A4")->pluck("id");
                                 $cost                   =   Price::where("job_id",1)->where("job_type","mono")->where("paper_id",$paperid)->pluck("price");
                                 $amount                 =   $cost * $minvoice->number_of_pages;
                                 $sumNoPagesA4Mono       +=  $minvoice->number_of_pages;
@@ -682,13 +683,14 @@ class InvoicingController extends Controller
                                 $objPHPExcel->getActiveSheet()->setCellValue('N'.$p,$minvoice->release_method);
                                 $objPHPExcel->getActiveSheet()->setCellValue('O'.$p,"N") ;//
                                 $objPHPExcel->getActiveSheet()->setCellValue('P'.$p,$minvoice->print_job_duplex); //duplex
-                                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$p,$minvoice->job_paper_size);
+                                $objPHPExcel->getActiveSheet()->setCellValue('Q'.$p,"A4");
                                 $objPHPExcel->getActiveSheet()->setCellValue('R'.$p,$minvoice->device_name);
                                 $objPHPExcel->getActiveSheet()->setCellValue('S'.$p,$minvoice->device_type);
                                 $objPHPExcel->getActiveSheet()->setCellValue('T'.$p,$minvoice->device_host);
                             }
 
                         }else{
+
                             $cost                   =   Price::where("job_id",1)->where("job_type","mono")->where("paper_id",$paperid)->pluck("price");
                             $amount                 =   $cost * $minvoice->number_of_pages;
                             $sumNoPagesA4Mono       +=  $minvoice->number_of_pages;
