@@ -82,13 +82,26 @@ class Towords
                 Phone: (+234) 12918761<br>
                 Email: lexmarksupport@robertjohnsonholdings.com
             </address>
+
+            <address>
+                <table>
+                    <tr><td>Bank Name:</td><td>Zenith Bank Plc</td></tr>
+                    <tr><td>Account No:</td><td>1010864930</td></tr>
+                    <tr><td>Sort Code:</td><td>57150505</td></tr>
+                    <tr><td>Bank Branch:</td><td>Anthony</td></tr>
+                </table>
+                
+            </address>
         </div><!-- /.col -->
         <div class="col-sm-4 invoice-col">
 
         </div><!-- /.col -->
         <div class="col-sm-4 invoice-col">
+            <b>TIN NO: 02345410-0001</b><br>
+            <b>VAT NO: IUV10002500775</b><br>
             <b>Invoice No: {{$invoice->invoice_no}}</b><br>
             <b>Invoice Date: {{$invoice->invoice_date}}</b><br>
+
             Bill To
             <address style="margin: 0px !important;">
                 <strong>{{$company->name}}</strong><br>

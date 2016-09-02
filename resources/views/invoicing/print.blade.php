@@ -117,24 +117,35 @@ class Towords
                     Phone: (+234) 12918761<br>
                     Email: lexmarksupport@robertjohnsonholdings.com
                 </address>
+
+                <address>
+                    <b>Bank Name:   Zenith Bank Plc</b><br>
+                    <b>Account No:  1010864930</b><br>
+                    <b>Sort Code:   57150505</b><br>
+                    <b>Bank Branch: Anthony</b><br>
+                </address>
             </div><!-- /.col -->
             <div class="col-sm-4 invoice-col">
 
             </div><!-- /.col -->
             <div class="col-sm-4 invoice-col">
+                <b>TIN NO: 02345410-0001</b><br>
+                <b>VAT NO: IUV10002500775</b><br>
                 <b>Invoice No: {{$invoice->invoice_no}}</b><br>
                 <b>Invoice Date: {{$invoice->invoice_date}}</b><br>
+
                 Bill To
                 <address style="margin: 0px !important;">
                     <strong>{{$company->name}}</strong><br>
                     {{$company->address}}, @if(!empty($company->city)){{$company->city}}, @endif @if(!empty($company->state)){{$company->state}} @endif<br>
-                                        @if(!empty($company->phone)) Phone: {{$company->phone}} @endif<br>
+                    @if(!empty($company->phone)) Phone: {{$company->phone}} @endif<br>
 
 
                 </address>
                 <img src="{{url()}}/dist/img/196765LOGO.jpg" style="margin: 0 !important; padding: 0 !important; width: 153px; height: 33px !important"  />
             </div>  <!-- /.col -->
-        </div>  <!-- /.row -->
+        </div>
+         <!-- /.row -->
         <div class="row">
             <div class="col-xs-12 col-md-12" style="text-align: center"><p class="center" ><b><u>Lexmark Managed Print Services</u></b></p></div>
             <div class="col-xs-12 col-md-12" style="text-align: center"><p class="center"><b><u>Duration: {{$invoice->duration}}</u></b></p></div>

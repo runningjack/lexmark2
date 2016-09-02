@@ -271,7 +271,7 @@ class InvoicingController extends Controller
         $invoiceno="";
         if(count($stacks)>0){
             $bill_no = $bill->genInvoiceNo($company->id)>0 ? $bill->genInvoiceNo($company->id) : "01";
-            $invoiceno =  !empty($input['inv_no']) ? "RJLEX/".strtoupper(substr($company->name,0,3))."/".$bill_no : "RJLEX/".strtoupper(substr($company->name,0,3))."/". str_pad($input['inv_no'],3,"0",STR_PAD_LEFT);
+            $invoiceno =  (!empty($input['inv_no']) && $input['inv_no'] !="") ? "RJLEX/".strtoupper(substr($company->name,0,3))."/".$input['inv_no'] : "RJLEX/".strtoupper(substr($company->name,0,3))."/". str_pad($bill_no,3,"0",STR_PAD_LEFT);
             $bill->invoice_no       =   $invoiceno;
             $bill->created_at       =   date("Y-m-d H:i:s");
             $bill->updated_at       =   date("Y-m-d H:i:s");
