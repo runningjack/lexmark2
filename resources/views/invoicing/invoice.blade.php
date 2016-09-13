@@ -90,7 +90,7 @@ class Towords
                     <tr><td>Sort Code:</td><td>57150505</td></tr>
                     <tr><td>Bank Branch:</td><td>Anthony</td></tr>
                 </table>
-                
+
             </address>
         </div><!-- /.col -->
         <div class="col-sm-4 invoice-col">

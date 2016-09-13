@@ -153,7 +153,7 @@ class Towords
         <!-- Table row -->
         <div class="row">
             <div class="col-xs-12 table-responsive">
-                <table class="table table-striped">
+                <table class="table table-striped" style="background: 1px #000000 solid">
                     <thead>
                     <tr>
                         <th>S/N</th>
