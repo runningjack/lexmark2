@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post("settings/paperdelete/{id}","PaperController@destroy");
     Route::get("settings/jobs","JobController@index");
     Route::post("settings/jobs","JobController@store");
-    Route::get("settings/price","JobController@getPrice");
+    Route::get("settings/price/{id?}","JobController@getPrice");
     Route::post("settings/price","JobController@postPrice");
     Route::post("settings/priceedit/{id?}","JobpriceController@update");
 

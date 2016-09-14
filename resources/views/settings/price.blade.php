@@ -97,6 +97,7 @@
 
                     <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" />
                     <div class="form-group has-feedback">
+                        <input type="hidden" name="company_id" id="company_id" value="{{$mcompany->id}}">
                         <select  class="form-control" name="paper_id" id="paperid" >
                             <?php
                                 if($papers){
@@ -154,7 +155,7 @@
                     <h4 class="modal-title">Edit Price</h4>
                 </div>
                 <div class="modal-body">
-
+                    <input type="hidden" name="company_id" id="company_id" value="{{$mcompany->id}}">
                     <input type="hidden" id="_token" name="_token" value="{{ csrf_token() }}" required />
                     <div class="form-group has-feedback">
                         <select  class="form-control" name="paper_id" id="_paperid" >

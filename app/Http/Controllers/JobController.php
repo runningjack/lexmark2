@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Job;
 use App\Paper;
 use App\Price;
@@ -119,10 +120,11 @@ class JobController extends Controller
     }
 
 
-    public function getPrice(){
+    public function getPrice(Request $request, $compid){
         //
-        $jobprices =  \DB::table("prices")->get();
-        return View("settings.price",['prices'=>$jobprices,'papers'=>Paper::all(),'jobs'=>Job::all(),'title'=>'Job Price Setting']);
+        $mcompany = Company::find($compid);
+        $jobprices =  \DB::table("prices")->where("company_id",$compid)->get();
+        return View("settings.price",["companies"=>Company::all(),"mcompany"=>$mcompany,'prices'=>$jobprices,"companyname"=>$mcompany->name,'papers'=>Paper::all(),'jobs'=>Job::all(),'title'=>'Job Price Setting']);
     }
 
     public function postPrice(Request $request){

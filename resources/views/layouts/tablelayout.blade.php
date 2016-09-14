@@ -20,10 +20,13 @@
 <div class="content-wrapper">
 <!-- Content Header (Page header) -->
 <section class="content-header">
-    <h1>
-        {{$title}}
+    <h1><strong>
+        {{$title}}</strong>
         <small>Listing</small>
     </h1>
+    <h3>
+        <?= !empty($companyname) ? $companyname : "" ?>
+    </h3>
     <ol class="breadcrumb">
         <li><a href="{{url()}}"><i class="fa fa-dashboard"></i> Home</a></li>
 
