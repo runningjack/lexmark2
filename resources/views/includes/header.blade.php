@@ -97,10 +97,10 @@
                 <ul class="treeview-menu">
                     <li><a href="{{url()}}/settings/paper"><i class="fa fa-paperclip"></i>Print Papers</a></li>
                     <li><a href="{{url()}}/settings/jobs"><i class="fa fa-print"></i>Jobs</a></li>
-                    <li class="<?php echo isset($companies) && !empty($companies) ? "treeview" :""  ?>"><a href="{{url()}}/settings/price"><i class="fa fa-money"></i>Job Prices</a>
+                    <li class="<?= (isset($companies) && !empty($companies)) ? "treeview" :""  ?>"><a href="#"><i class="fa fa-circle-o"></i> <span>Job Prices</span> <i class="fa fa-angle-left pull-right"></i></a>
                         @if(isset($companies))
                         <ul class="treeview-menu">
-                            @foreach($companies as $compnay)
+                            @foreach($companies as $company)
                                 <li><a href="{{url()}}/settings/price/{{$company->id}}"><i class="fa fa-money"></i> {{$company->name}} </a> </li>
                             @endforeach
                         </ul>

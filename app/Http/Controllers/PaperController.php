@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use App\Paper;
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -22,7 +23,7 @@ class PaperController extends Controller
         //
 
         $paper = Paper::all();
-        return View("settings.paper",['papers'=>$paper,'title'=>'Job Papers Setting']);
+        return View("settings.paper",["companies"=>Company::all(),'papers'=>$paper,'title'=>'Job Papers Setting']);
     }
 
     /**
@@ -87,7 +88,7 @@ class PaperController extends Controller
             }
             exit;
         }
-        return View("settings.paper",['papers'=>$papers,'title'=>'Job Papers Setting']);
+        return View("settings.paper",["companies"=>  Company::all(),'papers'=>$papers,'title'=>'Job Papers Setting']);
     }
 
     /**

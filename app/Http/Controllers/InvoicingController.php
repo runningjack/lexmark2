@@ -816,7 +816,7 @@ class InvoicingController extends Controller
         $pdf->loadView('invoicing.invoicepdf', $input)->setPaper('a4')->setOrientation('landscape')->save($pdfPath);
        //return $pdf->download($outputName);
 
-       return View("invoicing.invoice",['invoice'=>$bill,"total"=>$total,"company"=>$company,"branches"=>Branch::where("company_id",$company->id)->get(),"invoiceDatum"=>$ArrMain,"title"=>"Invoice"]);
+       return View("invoicing.invoice",["companies"=> Company::all(),'invoice'=>$bill,"total"=>$total,"company"=>$company,"branches"=>Branch::where("company_id",$company->id)->get(),"invoiceDatum"=>$ArrMain,"title"=>"Invoice"]);
     }
 
 

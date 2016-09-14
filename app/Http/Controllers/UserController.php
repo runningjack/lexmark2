@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -19,7 +20,7 @@ class UserController extends Controller
     public function index()
     {
         //
-        return View("administrators.index",['users'=>User::all(),'title'=>'User Listing']);
+        return View("administrators.index",["companies"=>Company::all(),'users'=>User::all(),'title'=>'User Listing']);
     }
 
     /**
@@ -30,7 +31,7 @@ class UserController extends Controller
     public function create()
     {
         //
-        return View("administrators.addnew",["permissions"=>\DB::table("permissions")->get(),"roles"=>\DB::table("roles")->where("name","<>","Moderator")->get(),"title"=>"Add New User"]);
+        return View("administrators.addnew",["companies"=>Company::all(),"permissions"=>\DB::table("permissions")->get(),"roles"=>\DB::table("roles")->where("name","<>","Moderator")->get(),"title"=>"Add New User"]);
 
     }
 
@@ -133,7 +134,7 @@ class UserController extends Controller
     {
         //
 
-        return View("administrators.edituser",["myuser"=>User::find($id),"myrole"=>\DB::table("role_user")->where("user_id",$id)->get(),"roles"=>\DB::table("roles")->get(),"title"=>"Edit User"]);
+        return View("administrators.edituser",["companies"=>Company::all(),"myuser"=>User::find($id),"myrole"=>\DB::table("role_user")->where("user_id",$id)->get(),"roles"=>\DB::table("roles")->get(),"title"=>"Edit User"]);
     }
 
     /**

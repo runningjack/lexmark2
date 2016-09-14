@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Company;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -20,7 +21,7 @@ class PrivilegeController extends Controller
     public function index()
     {
         //
-        return View("privileges.index",['roles'=>Role::all(),'permissions'=>Permission::all(),'title'=>'Roles and Privileges']);
+        return View("privileges.index",["companies"=> Company::all(),'roles'=>Role::all(),'permissions'=>Permission::all(),'title'=>'Roles and Privileges']);
     }
 
     /**
